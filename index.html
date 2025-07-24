@@ -3,69 +3,50 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OpenAir</title>
+  <title>OpenAir - Whisper in the Wind</title>
   <style>
     :root {
-      --melancholy1: #3b3b47;
-      --melancholy2: #4e4d5c;
-      --melancholy3: #5e5c6e;
-      --melancholy4: #6e6b7f;
-      --melancholy5: #7d7a90;
+      --deep-gray: #2b2b35;
+      --soft-gray: #3c3c47;
+      --fade-gray: #5e5e6b;
     }
 
     body {
       margin: 0;
-      font-family: 'Helvetica Neue', sans-serif;
-      background: linear-gradient(
-        135deg,
-        var(--melancholy1),
-        var(--melancholy2),
-        var(--melancholy3),
-        var(--melancholy4),
-        var(--melancholy5)
-      );
-      background-size: 500% 500%;
-      animation: gradientShift 20s ease infinite;
+      padding: 0;
+      font-family: 'Georgia', serif;
+      background: linear-gradient(135deg, var(--deep-gray), var(--soft-gray), var(--fade-gray));
+      background-size: 300% 300%;
+      animation: backgroundFade 20s ease infinite;
+      color: white;
+      height: 100vh;
       display: flex;
       flex-direction: column;
-      height: 100vh;
+      align-items: center;
     }
 
-    @keyframes gradientShift {
+    @keyframes backgroundFade {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
 
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 2rem;
+    .header {
+      padding: 3rem 1rem 1rem;
+      text-align: center;
     }
 
-    .brand {
-      font-size: 2.5rem;
-      font-weight: bold;
-      color: white;
+    .header h1 {
+      font-size: 3rem;
+      margin: 0;
+      letter-spacing: 1px;
     }
 
-    .login {
-      text-align: right;
-    }
-
-    .login a {
-      background-color: rgba(255, 255, 255, 0.15);
-      padding: 0.5rem 1rem;
-      border-radius: 10px;
-      color: white;
-      text-decoration: none;
-      margin-left: 1rem;
-      transition: 0.3s;
-    }
-
-    .login a:hover {
-      background-color: rgba(255, 255, 255, 0.25);
+    .header p {
+      font-style: italic;
+      margin-top: 0.5rem;
+      font-size: 1.1rem;
+      color: rgba(255, 255, 255, 0.85);
     }
 
     .main {
@@ -75,19 +56,6 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      color: white;
-      padding: 2rem;
-    }
-
-    .main h1 {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-    }
-
-    .main p {
-      font-size: 1.2rem;
-      max-width: 500px;
-      margin-bottom: 2rem;
     }
 
     .main button {
@@ -100,24 +68,31 @@
       border-radius: 50px;
       cursor: pointer;
       transition: background-color 0.3s;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
 
     .main button:hover {
       background-color: #ddd;
     }
+
+    .footer {
+      text-align: center;
+      font-size: 0.9rem;
+      padding: 1rem;
+      color: rgba(255,255,255,0.5);
+    }
   </style>
 </head>
 <body>
-  <header>
-    <div class="brand">OpenAir</div>
-    <div class="login">
-      <a href="#support">Buy Me a Coffee</a>
-      <a href="#login">Login</a>
-    </div>
-  </header>
-  <div class="main">
+  <div class="header">
+    <h1>OpenAir</h1>
     <p>Anonymous safe space for meaningful conversations with strangers worldwide.</p>
-    <button onclick="window.location.href='webcam.html'">Whisper in the Wind</button>
+  </div>
+  <div class="main">
+    <button onclick="alert('Webcam chat coming soon!')">Whisper in the Wind</button>
+  </div>
+  <div class="footer">
+    &copy; 2025 OpenAir. All rights reserved.
   </div>
 </body>
 </html>
