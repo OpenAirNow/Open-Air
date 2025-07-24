@@ -452,4 +452,365 @@
     const reportBtn = document.createElement('button');
     reportBtn.textContent = 'Report';
     reportBtn.classList.add('report-btn');
-   
+   <!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Open Air</title>
+  <style>
+    /* Reset */
+    * {
+      box-sizing: border-box;
+    }
+    body, html {
+      margin: 0; padding: 0;
+      height: 100%;
+      font-family: 'Cormorant Garamond', serif;
+      background: #d3d3d3; /* light gray */
+      color: #222;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+    }
+    header {
+      background: #666666;
+      padding: 8px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      border-bottom: 1px solid #999999;
+      color: white;
+    }
+    header .left, header .center, header .right {
+      display: flex;
+      align-items: center;
+    }
+    header .left {
+      flex: 1;
+      font-weight: 600;
+      font-size: 14px;
+      user-select: text;
+    }
+    header .center {
+      flex: 2;
+      flex-direction: column;
+      text-align: center;
+      font-weight: 600;
+      user-select: text;
+    }
+    header .center h1 {
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: 3px;
+      user-select: text;
+      color: white;
+    }
+    header .center p {
+      margin: 2px 0 0 0;
+      font-weight: 400;
+      font-size: 12px;
+      font-style: italic;
+      color: #ddd;
+      user-select: text;
+    }
+    header .right {
+      flex: 1;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+    header button, header a {
+      background: #4a90e2;
+      color: white;
+      padding: 6px 14px;
+      border: none;
+      border-radius: 18px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.3s;
+      text-decoration: none;
+      user-select: none;
+    }
+    header button:hover, header a:hover {
+      background: #357abd;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      height: calc(100vh - 56px);
+    }
+    /* Sidebar chat & members - HIDDEN at start */
+    .sidebar {
+      background: #f1f1f1;
+      width: 300px;
+      display: none; /* hidden until webcam started */
+      flex-direction: column;
+      padding: 15px;
+      gap: 12px;
+      color: #222;
+      user-select: text;
+      box-shadow: inset 1px 0 8px #bbb;
+    }
+    .chat-box {
+      flex: 1;
+      background: #e4e4e4;
+      border-radius: 10px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      color: #333;
+    }
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding-right: 12px;
+      font-size: 14px;
+    }
+    .chat-message {
+      margin-bottom: 8px;
+      padding: 6px 10px;
+      background: #c9c9c9;
+      border-radius: 10px;
+      word-wrap: break-word;
+      position: relative;
+      color: #111;
+    }
+    .report-btn {
+      position: absolute;
+      right: 6px;
+      top: 6px;
+      background: transparent;
+      border: none;
+      color: #cc4444;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 12px;
+      user-select: none;
+    }
+    .chat-input {
+      margin-top: 8px;
+      display: flex;
+      gap: 8px;
+    }
+    .chat-input input {
+      flex: 1;
+      padding: 10px 14px;
+      border-radius: 20px;
+      border: 1px solid #ccc;
+      outline: none;
+      font-size: 15px;
+      background: white;
+      color: black;
+      user-select: text;
+    }
+    .chat-input input::placeholder {
+      color: #888;
+    }
+    .chat-input button {
+      background: #4a90e2;
+      border: none;
+      color: white;
+      padding: 10px 18px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: background 0.3s;
+      user-select: none;
+    }
+    .chat-input button:hover {
+      background: #357abd;
+    }
+    /* Members section */
+    .members-section {
+      margin-top: 10px;
+      background: #e4e4e4;
+      border-radius: 10px;
+      padding: 10px;
+      display: none; /* only show when logged in */
+      flex-direction: column;
+      gap: 10px;
+      font-size: 13px;
+      user-select: text;
+      color: #222;
+    }
+    .members-section h3 {
+      margin: 0 0 6px 0;
+    }
+    .background-options {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+    .background-option {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border-color 0.3s;
+      user-select: none;
+    }
+    .background-option.selected {
+      border-color: #4a90e2;
+    }
+    .bg1 { background: linear-gradient(135deg, #667eea, #764ba2); }
+    .bg2 { background: linear-gradient(135deg, #f7971e, #ffd200); }
+    .bg3 { background: linear-gradient(135deg, #56ab2f, #a8e063); }
+    .bg4 { background: linear-gradient(135deg, #ff416c, #ff4b2b); }
+
+    /* Video area */
+    .video-area {
+      flex: 1;
+      background: #f7f7f7; /* soft off-white */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 30px 20px;
+      gap: 12px;
+      color: #222;
+      position: relative;
+      border-radius: 0 0 0 20px;
+      box-shadow: inset 0 0 50px #ddd;
+      user-select: none;
+    }
+    #video {
+      border-radius: 12px;
+      max-width: 85vw;
+      max-height: 65vh;
+      background: black;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+      display: none;
+    }
+    #startBtn {
+      background: #4a90e2;
+      border: none;
+      border-radius: 20px;
+      padding: 14px 44px;
+      font-size: 24px;
+      font-weight: 700;
+      cursor: pointer;
+      color: white;
+      transition: background 0.3s ease;
+      margin-top: 12px;
+      user-select: none;
+    }
+    #startBtn:hover {
+      background: #357abd;
+    }
+    /* Modal styles */
+    .modal-bg {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      user-select: none;
+    }
+    .modal-bg.active {
+      display: flex;
+    }
+    .modal {
+      background: #666666;
+      padding: 24px;
+      border-radius: 14px;
+      width: 320px;
+      color: white;
+      box-shadow: 0 0 15px rgba(0,0,0,0.8);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      user-select: none;
+    }
+    .modal h2 {
+      margin: 0 0 12px 0;
+      font-weight: 700;
+      font-size: 24px;
+      text-align: center;
+      user-select: text;
+    }
+    .modal input {
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+      outline: none;
+      user-select: text;
+    }
+    .modal button {
+      padding: 14px;
+      border-radius: 22px;
+      border: none;
+      background: #4a90e2;
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.3s;
+      user-select: none;
+    }
+    .modal button:hover {
+      background: #357abd;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="left">For Profit</div>
+  <div class="center">
+    <h1>Open Air</h1>
+    <p>Anonymous, safe space for meaningful conversations with strangers worldwide.</p>
+  </div>
+  <div class="right">
+    <a href="https://www.buymeacoffee.com/yourusername" target="_blank" rel="noopener noreferrer">Buy Me a Coffee ☕</a>
+    <button id="loginBtn">Log In</button>
+  </div>
+</header>
+
+<main>
+  <aside class="sidebar" id="sidebar">
+    <div class="chat-box" id="chatBox">
+      <div class="chat-messages" id="chatMessages"></div>
+      <div class="chat-input">
+        <input type="text" id="chatInput" placeholder="Speak your mind..." autocomplete="off" />
+        <button id="sendBtn">Send</button>
+      </div>
+    </div>
+
+    <div class="members-section" id="membersSection">
+      <h3>Members Area</h3>
+      <p>Pay $5 to unlock custom backgrounds.</p>
+      <div class="background-options" id="backgroundOptions">
+        <div class="background-option bg1 selected" data-bg="bg1"></div>
+        <div class="background-option bg2" data-bg="bg2"></div>
+        <div class="background-option bg3" data-bg="bg3"></div>
+        <div class="background-option bg4" data-bg="bg4"></div>
+      </div>
+    </div>
+  </aside>
+
+  <section class="video-area" id="videoArea">
+    <video id="video" autoplay playsinline></video>
+    <button id="startBtn">Whisper to the Wind</button>
+  </section>
+</main>
+
+<!-- Login Modal -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal" id="modal">
+    <h2>Log In</h2>
+    <input type="text" id="username" placeholder="Enter your username" autocomplete="off" />
+    <button id="modalLoginBtn">Log In</button>
+  </div>
+</div>
+
+<script>
+  const loginBtn = document.getElementById('login
+
+                                           
