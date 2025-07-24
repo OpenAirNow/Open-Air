@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Open Air - Whisper to the Wind</title>
+  <title>Open Air</title>
   <style>
     /* Reset */
     * {
@@ -37,12 +37,14 @@
       font-weight: 600;
       font-size: 14px;
       color: #aaaabb;
+      user-select: text;
     }
     header .center {
       flex: 2;
       flex-direction: column;
       text-align: center;
       font-weight: 600;
+      user-select: text;
     }
     header .center h1 {
       margin: 0;
@@ -85,4 +87,369 @@
       display: flex;
       height: calc(100vh - 56px);
     }
-    /* Sidebar cha*
+    /* Sidebar chat & members */
+    .sidebar {
+      background: #30304a;
+      width: 300px;
+      display: flex;
+      flex-direction: column;
+      padding: 15px;
+      gap: 12px;
+    }
+    .chat-box {
+      flex: 1;
+      background: #383854;
+      border-radius: 10px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding-right: 12px;
+      font-size: 14px;
+      color: #ddd;
+    }
+    .chat-message {
+      margin-bottom: 8px;
+      padding: 6px 10px;
+      background: #474766;
+      border-radius: 10px;
+      word-wrap: break-word;
+      position: relative;
+    }
+    .report-btn {
+      position: absolute;
+      right: 6px;
+      top: 6px;
+      background: transparent;
+      border: none;
+      color: #ff6666;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 12px;
+      user-select: none;
+    }
+    .chat-input {
+      margin-top: 8px;
+      display: flex;
+      gap: 8px;
+    }
+    .chat-input input {
+      flex: 1;
+      padding: 10px 14px;
+      border-radius: 20px;
+      border: none;
+      outline: none;
+      font-size: 15px;
+      background: #3b3b58;
+      color: white;
+      user-select: text;
+    }
+    .chat-input input::placeholder {
+      color: #bbbccc;
+    }
+    .chat-input button {
+      background: #667eea;
+      border: none;
+      color: white;
+      padding: 10px 18px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: background 0.3s;
+      user-select: none;
+    }
+    .chat-input button:hover {
+      background: #5565d4;
+    }
+    /* Members section */
+    .members-section {
+      margin-top: 10px;
+      background: #383854;
+      border-radius: 10px;
+      padding: 10px;
+      display: none; /* only show when logged in */
+      flex-direction: column;
+      gap: 10px;
+      color: #ccc;
+      font-size: 13px;
+      user-select: text;
+    }
+    .members-section h3 {
+      margin: 0 0 6px 0;
+    }
+    .background-options {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+    .background-option {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border-color 0.3s;
+      user-select: none;
+    }
+    .background-option.selected {
+      border-color: #667eea;
+    }
+    .bg1 { background: linear-gradient(135deg, #667eea, #764ba2); }
+    .bg2 { background: linear-gradient(135deg, #f7971e, #ffd200); }
+    .bg3 { background: linear-gradient(135deg, #56ab2f, #a8e063); }
+    .bg4 { background: linear-gradient(135deg, #ff416c, #ff4b2b); }
+
+    /* Video area */
+    .video-area {
+      flex: 1;
+      background: #f7f7f7; /* soft off-white */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 30px 20px;
+      gap: 12px;
+      color: #222;
+      position: relative;
+      border-radius: 0 0 0 20px;
+      box-shadow: inset 0 0 50px #ddd;
+      user-select: none;
+    }
+    #video {
+      border-radius: 12px;
+      max-width: 85vw;
+      max-height: 65vh;
+      background: black;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+      display: none;
+    }
+    #startBtn {
+      background: #667eea;
+      border: none;
+      border-radius: 20px;
+      padding: 14px 44px;
+      font-size: 24px;
+      font-weight: 700;
+      cursor: pointer;
+      color: white;
+      transition: background 0.3s ease;
+      margin-top: 12px;
+      user-select: none;
+    }
+    #startBtn:hover {
+      background: #5565d4;
+    }
+    /* Modal styles */
+    .modal-bg {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      user-select: none;
+    }
+    .modal-bg.active {
+      display: flex;
+    }
+    .modal {
+      background: #222238;
+      padding: 24px;
+      border-radius: 14px;
+      width: 320px;
+      color: white;
+      box-shadow: 0 0 15px rgba(0,0,0,0.8);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      user-select: none;
+    }
+    .modal h2 {
+      margin: 0 0 12px 0;
+      font-weight: 700;
+      font-size: 24px;
+      text-align: center;
+      user-select: text;
+    }
+    .modal input {
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+      outline: none;
+      user-select: text;
+    }
+    .modal button {
+      padding: 14px;
+      border-radius: 22px;
+      border: none;
+      background: #667eea;
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.3s;
+      user-select: none;
+    }
+    .modal button:hover {
+      background: #5565d4;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="left">For Profit</div>
+  <div class="center">
+    <h1>Open Air</h1>
+    <p>Anonymous, safe space for meaningful conversations with strangers worldwide.</p>
+  </div>
+  <div class="right">
+    <a href="https://www.buymeacoffee.com/yourusername" target="_blank" rel="noopener noreferrer">Buy Me a Coffee ☕</a>
+    <button id="loginBtn">Log In</button>
+  </div>
+</header>
+
+<main>
+  <aside class="sidebar">
+    <div class="chat-box" id="chatBox">
+      <div class="chat-messages" id="chatMessages"></div>
+      <div class="chat-input">
+        <input type="text" id="chatInput" placeholder="Speak your mind..." autocomplete="off" />
+        <button id="sendBtn">Send</button>
+      </div>
+    </div>
+
+    <div class="members-section" id="membersSection">
+      <h3>Members Area</h3>
+      <p>Pay $5 to unlock custom backgrounds.</p>
+      <div class="background-options" id="backgroundOptions">
+        <div class="background-option bg1 selected" data-bg="bg1"></div>
+        <div class="background-option bg2" data-bg="bg2"></div>
+        <div class="background-option bg3" data-bg="bg3"></div>
+        <div class="background-option bg4" data-bg="bg4"></div>
+      </div>
+    </div>
+  </aside>
+
+  <section class="video-area" id="videoArea">
+    <video id="video" autoplay playsinline></video>
+    <button id="startBtn">Whisper to the Wind</button>
+  </section>
+</main>
+
+<!-- Login Modal -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal" id="modal">
+    <h2>Log In</h2>
+    <input type="text" id="username" placeholder="Enter your username" autocomplete="off" />
+    <button id="modalLoginBtn">Log In</button>
+  </div>
+</div>
+
+<script>
+  // Elements
+  const loginBtn = document.getElementById('loginBtn');
+  const modalBg = document.getElementById('modalBg');
+  const modal = document.getElementById('modal');
+  const modalLoginBtn = document.getElementById('modalLoginBtn');
+  const usernameInput = document.getElementById('username');
+  const membersSection = document.getElementById('membersSection');
+  const backgroundOptions = document.getElementById('backgroundOptions');
+  const chatMessages = document.getElementById('chatMessages');
+  const chatInput = document.getElementById('chatInput');
+  const sendBtn = document.getElementById('sendBtn');
+  const startBtn = document.getElementById('startBtn');
+  const video = document.getElementById('video');
+  const videoArea = document.getElementById('videoArea');
+
+  let loggedIn = false;
+  let selectedBackground = 'bg1';
+
+  // Open login modal
+  loginBtn.addEventListener('click', () => {
+    modalBg.classList.add('active');
+    usernameInput.value = '';
+    usernameInput.focus();
+  });
+
+  // Close modal on clicking outside
+  modalBg.addEventListener('click', (e) => {
+    if (e.target === modalBg) {
+      modalBg.classList.remove('active');
+    }
+  });
+
+  // Prevent modal click from closing modal
+  modal.addEventListener('click', (e) => {
+    e.stopPropagation();
+  });
+
+  // Handle login button in modal
+  modalLoginBtn.addEventListener('click', () => {
+    const username = usernameInput.value.trim();
+    if (!username) {
+      alert('Please enter a username');
+      usernameInput.focus();
+      return;
+    }
+    alert(`Welcome, ${username}! Members get custom backgrounds for $5.`);
+    loggedIn = true;
+    modalBg.classList.remove('active');
+    membersSection.style.display = 'flex';
+    loginBtn.style.display = 'none';
+  });
+
+  // Background selection logic
+  backgroundOptions.querySelectorAll('.background-option').forEach(option => {
+    option.addEventListener('click', () => {
+      if (!loggedIn) {
+        alert('You must be logged in and pay $5 to unlock custom backgrounds.');
+        return;
+      }
+      backgroundOptions.querySelectorAll('.background-option').forEach(opt => opt.classList.remove('selected'));
+      option.classList.add('selected');
+      selectedBackground = option.dataset.bg;
+      // Apply selected background to videoArea
+      switch(selectedBackground) {
+        case 'bg1':
+          videoArea.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+          break;
+        case 'bg2':
+          videoArea.style.background = 'linear-gradient(135deg, #f7971e, #ffd200)';
+          break;
+        case 'bg3':
+          videoArea.style.background = 'linear-gradient(135deg, #56ab2f, #a8e063)';
+          break;
+        case 'bg4':
+          videoArea.style.background = 'linear-gradient(135deg, #ff416c, #ff4b2b)';
+          break;
+      }
+    });
+  });
+
+  // Chat logic (simple for demo)
+  sendBtn.addEventListener('click', () => {
+    const msg = chatInput.value.trim();
+    if (!msg) return;
+    addChatMessage(msg);
+    chatInput.value = '';
+  });
+  chatInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') sendBtn.click();
+  });
+
+  function addChatMessage(text) {
+    const msgDiv = document.createElement('div');
+    msgDiv.classList.add('chat-message');
+    msgDiv.textContent = text;
+
+    // Report button for each message
+    const reportBtn = document.createElement('button');
+    reportBtn.textContent = 'Report';
+    reportBtn.classList.add('report-btn');
+   
