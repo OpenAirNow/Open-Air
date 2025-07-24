@@ -6,11 +6,11 @@
   <title>OpenAir</title>
   <style>
     :root {
-      --melancholy1: #6a5d7b;
-      --melancholy2: #4f4d6d;
-      --melancholy3: #3d3b52;
-      --melancholy4: #2e2c3e;
-      --melancholy5: #1f1e2a;
+      --melancholy1: #3b3b47;
+      --melancholy2: #4e4d5c;
+      --melancholy3: #5e5c6e;
+      --melancholy4: #6e6b7f;
+      --melancholy5: #7d7a90;
     }
 
     body {
@@ -25,7 +25,7 @@
         var(--melancholy5)
       );
       background-size: 500% 500%;
-      animation: gradientShift 15s ease infinite;
+      animation: gradientShift 20s ease infinite;
       display: flex;
       flex-direction: column;
       height: 100vh;
@@ -48,18 +48,6 @@
       font-size: 2.5rem;
       font-weight: bold;
       color: white;
-    }
-
-    .subtitle {
-      font-size: 1.1rem;
-      margin-top: 0.3rem;
-      color: rgba(255, 255, 255, 0.8);
-    }
-
-    .description {
-      font-size: 1rem;
-      margin-top: 0.3rem;
-      color: rgba(255, 255, 255, 0.7);
     }
 
     .login {
@@ -92,8 +80,8 @@
     }
 
     .main h1 {
-      font-size: 3.2rem;
-      margin-bottom: 0.5rem;
+      font-size: 3rem;
+      margin-bottom: 1rem;
     }
 
     .main p {
@@ -121,18 +109,13 @@
 </head>
 <body>
   <header>
-    <div class="brand">
-      OpenAir
-      <div class="subtitle">Anonymous safe space for meaningful conversations with strangers.</div>
-      <div class="description">Membership unlocks custom background themes and more.</div>
-    </div>
+    <div class="brand">OpenAir</div>
     <div class="login">
       <a href="#support">Buy Me a Coffee</a>
       <a href="#login">Login</a>
     </div>
   </header>
   <div class="main">
-    <h1>Whisper in the Wind</h1>
     <p>Anonymous safe space for meaningful conversations with strangers worldwide.</p>
     <button onclick="window.location.href='webcam.html'">Whisper in the Wind</button>
   </div>
