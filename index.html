@@ -1,327 +1,140 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Open Air</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OpenAir</title>
   <style>
-    /* Reset */
-    * {
-      box-sizing: border-box;
+    :root {
+      --melancholy1: #6a5d7b;
+      --melancholy2: #4f4d6d;
+      --melancholy3: #3d3b52;
+      --melancholy4: #2e2c3e;
+      --melancholy5: #1f1e2a;
     }
-    body, html {
-      margin: 0; padding: 0;
-      height: 100%;
-      font-family: 'Cormorant Garamond', serif;
-      background: #d3d3d3; /* light gray */
-      color: #222;
+
+    body {
+      margin: 0;
+      font-family: 'Helvetica Neue', sans-serif;
+      background: linear-gradient(
+        135deg,
+        var(--melancholy1),
+        var(--melancholy2),
+        var(--melancholy3),
+        var(--melancholy4),
+        var(--melancholy5)
+      );
+      background-size: 500% 500%;
+      animation: gradientShift 15s ease infinite;
       display: flex;
       flex-direction: column;
-      user-select: none;
+      height: 100vh;
     }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
     header {
-      background: #666666;
-      padding: 8px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      position: relative;
-      border-bottom: 1px solid #999999;
+      padding: 1rem 2rem;
+    }
+
+    .brand {
+      font-size: 2.5rem;
+      font-weight: bold;
       color: white;
     }
-    header .left, header .center, header .right {
-      display: flex;
-      align-items: center;
+
+    .subtitle {
+      font-size: 1.1rem;
+      margin-top: 0.3rem;
+      color: rgba(255, 255, 255, 0.8);
     }
-    header .left {
-      flex: 1;
-      font-weight: 600;
-      font-size: 14px;
-      user-select: text;
+
+    .description {
+      font-size: 1rem;
+      margin-top: 0.3rem;
+      color: rgba(255, 255, 255, 0.7);
     }
-    header .center {
-      flex: 2;
-      flex-direction: column;
-      text-align: center;
-      font-weight: 600;
-      user-select: text;
+
+    .login {
+      text-align: right;
     }
-    header .center h1 {
-      margin: 0;
-      font-size: 28px;
-      letter-spacing: 3px;
-      user-select: text;
+
+    .login a {
+      background-color: rgba(255, 255, 255, 0.15);
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
       color: white;
-    }
-    header .center p {
-      margin: 2px 0 0 0;
-      font-weight: 400;
-      font-size: 12px;
-      font-style: italic;
-      color: #ddd;
-      user-select: text;
-    }
-    header .right {
-      flex: 1;
-      justify-content: flex-end;
-      gap: 10px;
-    }
-    header button, header a {
-      background: #4a90e2;
-      color: white;
-      padding: 6px 14px;
-      border: none;
-      border-radius: 18px;
-      font-weight: 600;
-      font-size: 14px;
-      cursor: pointer;
-      transition: background 0.3s;
       text-decoration: none;
-      user-select: none;
-    }
-    header button:hover, header a:hover {
-      background: #357abd;
+      margin-left: 1rem;
+      transition: 0.3s;
     }
 
-    main {
-      flex: 1;
-      display: flex;
-      height: calc(100vh - 56px);
+    .login a:hover {
+      background-color: rgba(255, 255, 255, 0.25);
     }
-    /* Sidebar chat & members - HIDDEN at start */
-    .sidebar {
-      background: #f1f1f1;
-      width: 300px;
-      display: none; /* hidden until webcam started */
-      flex-direction: column;
-      padding: 15px;
-      gap: 12px;
-      color: #222;
-      user-select: text;
-      box-shadow: inset 1px 0 8px #bbb;
-    }
-    .chat-box {
-      flex: 1;
-      background: #e4e4e4;
-      border-radius: 10px;
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      color: #333;
-    }
-    .chat-messages {
-      flex: 1;
-      overflow-y: auto;
-      padding-right: 12px;
-      font-size: 14px;
-    }
-    .chat-message {
-      margin-bottom: 8px;
-      padding: 6px 10px;
-      background: #c9c9c9;
-      border-radius: 10px;
-      word-wrap: break-word;
-      position: relative;
-      color: #111;
-    }
-    .report-btn {
-      position: absolute;
-      right: 6px;
-      top: 6px;
-      background: transparent;
-      border: none;
-      color: #cc4444;
-      font-weight: 700;
-      cursor: pointer;
-      font-size: 12px;
-      user-select: none;
-    }
-    .chat-input {
-      margin-top: 8px;
-      display: flex;
-      gap: 8px;
-    }
-    .chat-input input {
-      flex: 1;
-      padding: 10px 14px;
-      border-radius: 20px;
-      border: 1px solid #ccc;
-      outline: none;
-      font-size: 15px;
-      background: white;
-      color: black;
-      user-select: text;
-    }
-    .chat-input input::placeholder {
-      color: #888;
-    }
-    .chat-input button {
-      background: #4a90e2;
-      border: none;
-      color: white;
-      padding: 10px 18px;
-      border-radius: 20px;
-      cursor: pointer;
-      font-weight: 700;
-      transition: background 0.3s;
-      user-select: none;
-    }
-    .chat-input button:hover {
-      background: #357abd;
-    }
-    /* Members section */
-    .members-section {
-      margin-top: 10px;
-      background: #e4e4e4;
-      border-radius: 10px;
-      padding: 10px;
-      display: none; /* only show when logged in */
-      flex-direction: column;
-      gap: 10px;
-      font-size: 13px;
-      user-select: text;
-      color: #222;
-    }
-    .members-section h3 {
-      margin: 0 0 6px 0;
-    }
-    .background-options {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-    }
-    .background-option {
-      width: 38px;
-      height: 38px;
-      border-radius: 10px;
-      cursor: pointer;
-      border: 2px solid transparent;
-      transition: border-color 0.3s;
-      user-select: none;
-    }
-    .background-option.selected {
-      border-color: #4a90e2;
-    }
-    .bg1 { background: linear-gradient(135deg, #667eea, #764ba2); }
-    .bg2 { background: linear-gradient(135deg, #f7971e, #ffd200); }
-    .bg3 { background: linear-gradient(135deg, #56ab2f, #a8e063); }
-    .bg4 { background: linear-gradient(135deg, #ff416c, #ff4b2b); }
 
-    /* Video area */
-    .video-area {
+    .main {
       flex: 1;
-      background: #f7f7f7; /* soft off-white */
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
-      padding: 30px 20px;
-      gap: 12px;
-      color: #222;
-      position: relative;
-      border-radius: 0 0 0 20px;
-      box-shadow: inset 0 0 50px #ddd;
-      user-select: none;
-    }
-    #video {
-      border-radius: 12px;
-      max-width: 85vw;
-      max-height: 65vh;
-      background: black;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.3);
-      display: none;
-    }
-    #startBtn {
-      background: #4a90e2;
-      border: none;
-      border-radius: 20px;
-      padding: 14px 44px;
-      font-size: 24px;
-      font-weight: 700;
-      cursor: pointer;
-      color: white;
-      transition: background 0.3s ease;
-      margin-top: 12px;
-      user-select: none;
-    }
-    #startBtn:hover {
-      background: #357abd;
-    }
-    /* Modal styles */
-    .modal-bg {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.7);
-      display: none;
       justify-content: center;
-      align-items: center;
-      z-index: 1000;
-      user-select: none;
-    }
-    .modal-bg.active {
-      display: flex;
-    }
-    .modal {
-      background: #666666;
-      padding: 24px;
-      border-radius: 14px;
-      width: 320px;
-      color: white;
-      box-shadow: 0 0 15px rgba(0,0,0,0.8);
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      user-select: none;
-    }
-    .modal h2 {
-      margin: 0 0 12px 0;
-      font-weight: 700;
-      font-size: 24px;
       text-align: center;
-      user-select: text;
-    }
-    .modal input {
-      padding: 10px 12px;
-      border-radius: 8px;
-      border: none;
-      font-size: 16px;
-      outline: none;
-      user-select: text;
-    }
-    .modal button {
-      padding: 14px;
-      border-radius: 22px;
-      border: none;
-      background: #4a90e2;
       color: white;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.3s;
-      user-select: none;
+      padding: 2rem;
     }
-    .modal button:hover {
-      background: #357abd;
+
+    .main h1 {
+      font-size: 3.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .main p {
+      font-size: 1.2rem;
+      max-width: 500px;
+      margin-bottom: 2rem;
+    }
+
+    .main button {
+      background-color: white;
+      color: #333;
+      border: none;
+      padding: 1rem 2.5rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .main button:hover {
+      background-color: #ddd;
     }
   </style>
 </head>
 <body>
-
-<header>
-  <div class="left">For Profit</div>
-  <div class="center">
-    <h1>Open Air</h1>
-    <p>Anonymous, safe space for meaningful conversations with strangers worldwide.</p>
+  <header>
+    <div class="brand">
+      OpenAir
+      <div class="subtitle">Anonymous safe space for meaningful conversations with strangers.</div>
+      <div class="description">Membership unlocks custom background themes and more.</div>
+    </div>
+    <div class="login">
+      <a href="#support">Buy Me a Coffee</a>
+      <a href="#login">Login</a>
+    </div>
+  </header>
+  <div class="main">
+    <h1>Whisper in the Wind</h1>
+    <p>Anonymous safe space for meaningful conversations with strangers worldwide.</p>
+    <button onclick="window.location.href='webcam.html'">Whisper in the Wind</button>
   </div>
-  <div class="right">
-    <a href="https://www.buymeacoffee.com/yourusername" target="_blank" rel="noopener noreferrer">Buy Me a Coffee ☕</a>
-    <button id="loginBtn">Log In</button>
-  </div>
-</header>
-
-<main>
-  <aside class="sidebar" id="sidebar">
-    <div class="chat-box" id="chatBox">
-      <div class="chat-messages" id="chatMessages"></div>
-      <div class="chat-input">
-        <input type="text" id="chatInput" placeho
+</body>
+</html>
